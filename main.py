@@ -20,7 +20,6 @@ Some important commands are !queue (to show queue), !add <search term or youtube
 !remove <index of song> (remove song from queue), and !mv <begin> <end> (move songs around in queue).
 For all the commands, run the command !help
 '''
-
 contributions = '''
 Any contributions are highly appreciated as this was made by one person.
 Any reported bugs or issues are also highly appreciated as this is a relatively new bot.
