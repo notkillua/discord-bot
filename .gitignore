@@ -2,8 +2,10 @@
 __pycache__/
 .idea/
 .vs/
+# Custom files
 *.csv
 Shell_Scripts/
 copy.exe
 compile.exe
 copy.ps1
+.env

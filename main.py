@@ -38,9 +38,6 @@ def get_prefix(bot: commands.Bot, message: discord.Message):
     return prefixes.find_one({'id': str(message.guild.id)})['prefix']
 
 
-if not path.isfile('prefixes.json'):
-    with open('prefixes.json', 'w+') as file:
-        file.write('{}')
 myBot = commands.Bot(command_prefix=get_prefix)
 startup_extensions: List[str] = [
     'discord_methods_playlists',
