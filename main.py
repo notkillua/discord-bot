@@ -90,5 +90,5 @@ async def prefix(ctx, *new_prefix):
         }
     })
     await ctx.send(f'Prefix has been changed to {new_prefix}')
-# Run discord bot
+# Run discord bot with token
 myBot.run(TOKEN)
