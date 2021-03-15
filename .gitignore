@@ -5,7 +5,4 @@ __pycache__/
 # Custom files
 *.csv
 Shell_Scripts/
-copy.exe
-compile.exe
-copy.ps1
-.env
+*.exe
