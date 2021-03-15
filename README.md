@@ -9,9 +9,13 @@ Database: mongodb
 Discord library: discord.py
 Queues: stored in csv files dynamically created
 ## Instructions To Run
-Because in the env file there is are separate tokens for production and development, you need to run the python file as
-```python
-print('Hello World')
+Because in the env file there is are separate tokens for production and development, you need to run the python file (development) as
+```bash
+python main.py dev
+```
+and python file (production) as
+```
+python main.py prod
 ```
 ## Commands
 ### General
