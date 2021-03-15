@@ -32,7 +32,6 @@ if sys.argv[1] == 'dev':
     print('Development discord bot started')
 else:
     print('Production discord bot running')
-#
 
 
 def get_prefix(bot: commands.Bot, message: discord.Message):
