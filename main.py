@@ -50,7 +50,6 @@ for extension in startup_extensions:
 
 @myBot.event
 async def on_guild_join(guild: discord.Guild):
-    # prefixes[str(guild.id)] = '!'
     prefixes.insert_one({
         'id': str(guild.id),
         'prefix': '!'
