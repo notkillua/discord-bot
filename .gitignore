@@ -1,0 +1,9 @@
+# Auto-generated folders by editors of python
+__pycache__/
+.idea/
+.vs/
+*.csv
+Shell_Scripts/
+copy.exe
+compile.exe
+copy.ps1
