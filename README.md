@@ -8,6 +8,11 @@ Any contributions are highly appreciated as this was made by one person and it i
 Database: mongodb
 Discord library: discord.py
 Queues: stored in csv files dynamically created
+## Instructions To Run
+Because in the env file there is are separate tokens for production and development, you need to run the python file as
+```python
+print('Hello World')
+```
 ## Commands
 ### General
 ban - Bans member  
