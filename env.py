@@ -1,3 +1,4 @@
+# Read environment variables
 file = open('.env', 'r')
 variables = file.readlines()
 env = {}
