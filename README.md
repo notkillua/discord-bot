@@ -5,8 +5,8 @@ Musical has many commands for adding, moving, deleting for queues and playlists.
 ## Contributions
 Any contributions are highly appreciated as this was made by one person and it is a relatively new bot.
 ## Technology
-Database: mongodb
-Discord library: discord.py
+Database: mongodb  
+Discord library: discord.py  
 Queues: stored in csv files dynamically created
 ## Instructions To Run
 Because in the env file there is are separate tokens for production and development, you need to run the python file (development) as
@@ -26,7 +26,7 @@ nick - Changes nickname of Bot
 unban - Unbans member
 ### Music
 add - Adds song to queue  
-joinJoins video channel  
+join - Joins video channel  
 leave - Leaves voice channel  
 loop - Loop queue  
 lyrics - Show lyrics of song  
