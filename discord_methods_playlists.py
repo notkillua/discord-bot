@@ -3,8 +3,10 @@ import emoji
 from youtube_search import YoutubeSearch
 from methods import getTitle
 from discord.ext import commands
-from db import db
+from db import client
 import pymongo
+db = client['discordbot_playlists']
+playlist_data_db = client['discordbot_data']['playlist_data']
 
 
 def checkName(name: str):
@@ -15,7 +17,7 @@ def checkName(name: str):
 
 
 async def checkUser(ctx, name, message):
-    if not db['playlist_data'].find_one({'name': name})['author_id'] == str(ctx.author.id):
+    if not playlist_data_db.find_one({'name': name})['author_id'] == str(ctx.author.id):
         await ctx.reply(message)
         return True
 
@@ -25,20 +27,14 @@ class Playlist(commands.Cog):
         self.bot = bot
         self.playlist_name = None
         self.collection = None
-        self.forbidden_playlist_names = [
-            'playlist_data',
-            'prefixes'
-        ]
 
     @commands.command(brief='Set current playlist',
                       description='Set current playlist so that you don\'t have to keep saying playlist name in playlist commands')
     async def pset(self, ctx, *playlist_name):
         playlist_name = ' '.join(playlist_name)
-        if playlist_name in self.forbidden_playlist_names:
-            return await ctx.reply('Name is forbidden. Please choose a different one.')
         if checkName(playlist_name):
             return await ctx.reply('No playlist with that name')
-        playlist = db['playlist_data'].find_one({'name': playlist_name})
+        playlist = playlist_data_db.find_one({'name': playlist_name})
         if (not playlist['server_id'] == str(ctx.guild.id)) and playlist['private']:
             return await ctx.reply('No playlist with that name')
         self.playlist_name = playlist_name
@@ -53,14 +49,12 @@ class Playlist(commands.Cog):
         except ValueError:
             return await ctx.reply('Private value can only be 0 (public) or 1 (private)')
         playlist_name = ' '.join(playlist_name)
-        if playlist_name in self.forbidden_playlist_names:
-            return await ctx.reply('Name is forbidden. Please choose a different one.')
         if not checkName(playlist_name):
             return await ctx.reply('Already have playlist with same name')
         if not playlist_name:
             return await ctx.reply('Playlist name cannot be empty')
         db.create_collection(playlist_name)
-        db['playlist_data'].insert_one({
+        playlist_data_db.insert_one({
             'name': playlist_name,
             'private': private,
             'author_id': str(ctx.author.id),
@@ -194,7 +188,7 @@ class Playlist(commands.Cog):
         if await checkUser(ctx, name, 'You are not the owner of the playlist, so you cannot delete the playlist'):
             return
         db[name].drop()
-        db['playlist_data'].delete_one({'name': name})
+        playlist_data_db.delete_one({'name': name})
         if name == self.playlist_name:
             self.collection = None
             self.playlist_name = None
@@ -214,7 +208,7 @@ class Playlist(commands.Cog):
 
     @commands.command(brief='Show playlists', description='Show playlists')
     async def playlists(self, ctx):
-        collections = [collection for collection in db['playlist_data'].find() if(collection['private'] is False or (
+        collections = [collection for collection in playlist_data_db.find() if(collection['private'] is False or (
             collection['private'] is True and collection['server_id'] == str(ctx.guild.id)))]
         if collections:
             await ctx.send('Playlists:')
@@ -236,8 +230,8 @@ class Playlist(commands.Cog):
         if new_name == 'playlist_data':
             return await ctx.reply('Name is forbidden. Please choose a different one.')
         self.collection.rename(new_name)
-        db['playlist_data'].update_one({'name': self.playlist_name}, {
-                                       '$set': {'name': new_name}})
+        playlist_data_db.update_one({'name': self.playlist_name}, {
+            '$set': {'name': new_name}})
         await ctx.send(f'Renamed playlist {self.playlist_name} to {new_name}')
         self.playlist_name = new_name
 

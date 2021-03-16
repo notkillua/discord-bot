@@ -3,7 +3,8 @@ from discord.ext import commands
 from env import env
 import discord
 import sys
-from db import db
+from db import client
+db = client['discordbot_data']
 # Discord bot token
 TOKEN = env['DEV_TOKEN'] if sys.argv[1] == 'dev' else env['PROD_TOKEN']
 # Get prefixes collection
@@ -81,6 +82,8 @@ async def on_guild_remove(guild: discord.Guild):
 @myBot.command(brief='Change prefix', description='Change prefix. Default prefix is !')
 async def prefix(ctx, *new_prefix):
     new_prefix = ' '.join(new_prefix)
+    if not new_prefix:
+        return
     prefixes.update_one({
         'id': str(ctx.guild.id)
     },

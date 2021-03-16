@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 from discord.ext.commands.core import has_permissions, MissingPermissions
+from discord import Member
 
 
 class General(commands.Cog):
@@ -19,7 +20,7 @@ class General(commands.Cog):
 
     @commands.command(brief='Bans member', description='Syntax: !ban @<member name> <reason>')
     @has_permissions(ban_members=True)
-    async def ban(self, ctx, member: discord.User,*reason) -> None:
+    async def ban(self, ctx, member: discord.User, *reason) -> None:
         reason = ' '.join(reason)
         await ctx.guild.ban(member, reason=reason)
         await ctx.reply('User has been banned')
@@ -36,10 +37,20 @@ class General(commands.Cog):
         await member.kick()
         await ctx.reply('User has been kicked')
 
+    @commands.command(brief='Mute someone', description='Mute will mute a member. Just pass in the member with an @ sign and 1 or 0 for muted or not')
+    @has_permissions(ban_members=True)
+    async def mute(self, ctx, member: Member, value: bool):
+        try:
+            await member.edit(mute=value)
+        except discord.errors.HTTPException:
+            return await ctx.reply('User must be connected to a voice channel')
+        await ctx.send('{member} has been {status}'.format(member=member.display_name, status='muted' if value else 'unmuted'))
+
+    @mute.error
     @ban.error
     @kick.error
     @unban.error
-    async def ban_error(self, ctx, error):
+    async def permissions_error(self, ctx, error):
         if isinstance(error, MissingPermissions):
             await ctx.send('You don\'t have the correct permissions')
 
