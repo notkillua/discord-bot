@@ -3,7 +3,7 @@ __pycache__/
 .idea/
 .vs/
 # Custom files
-*.csv
 Shell_Scripts/
 *.exe
+*.ps1
 .env
