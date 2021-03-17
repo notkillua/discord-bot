@@ -2,8 +2,6 @@
 __pycache__/
 .idea/
 .vs/
-# Custom files
-Shell_Scripts/
-*.exe
-*.ps1
 .env
+*.exe
+vars.ps1
