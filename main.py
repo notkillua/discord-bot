@@ -15,12 +15,14 @@ Musical is a music bot that can play music in voice channels.
 Musical is very similar to another discord bot called Rhythm.
 Both bots have the same purpose of playing music, and have queues and playlists.
 '''
+
 important_commands = '''
 The default command prefix is !, but you can change it with !prefix <new prefix>.
 Some important commands are !queue (to show queue), !add <search term or youtube url> (add song to queue),
 !remove <index of song> (remove song from queue), and !mv <begin> <end> (move songs around in queue).
 For all the commands, run the command !help
 '''
+
 contributions = '''
 Any contributions are highly appreciated as this was made by one person.
 Any reported bugs or issues are also highly appreciated as this is a relatively new bot.
