@@ -27,7 +27,10 @@ class Music(commands.Cog):
         self.stopped = False
         self.skip_song = False
         self.loop = {}
-        self.ydl_options = {'format': 'bestaudio', 'noplaylist': 'True'}
+        self.ydl_options = {
+            'format': 'bestaudio',
+            'noplaylist': 'True'
+        }
         self.song = None
         self.place = 0
         self.go = None
