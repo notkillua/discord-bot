@@ -7,6 +7,7 @@ from db import client
 import pymongo
 db = client['discordbot_playlists']
 playlist_data_db = client['discordbot_data']['playlist_data']
+queue = client['discordbot_queues']
 
 
 def checkName(name: str):
@@ -241,15 +242,11 @@ class Playlist(commands.Cog):
             return await ctx.reply('Set the playlist name with !pset <playlist name>')
         if await checkUser(ctx, self.playlist_name, 'You are not the owner of the playlist, so you cannot save songs to it'):
             return
-        with open(f'{ctx.message.guild.id}.csv') as csvfile:
-            reader = csv.reader(csvfile)
-            songs = [{
-                'name': song[0],
-                'url': song[1]
-            } for song in reader]
-            self.collection.delete_many({})
-            self.collection.insert_many(songs)
-            await ctx.send(f'Saved data to playlist {self.playlist_name}')
+        collection = queue[str(ctx.message.guild.id)]
+        songs = [i for i in collection.find()]
+        self.collection.delete_many({})
+        self.collection.insert_many(songs)
+        await ctx.send(f'Saved data to playlist {self.playlist_name}')
 
     @commands.command(brief='Get the current playlist', description='Gets the current playlist')
     async def playlist(self, ctx):

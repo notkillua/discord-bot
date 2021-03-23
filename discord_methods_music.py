@@ -1,4 +1,3 @@
-from discord.ext.commands import MissingPermissions, has_permissions
 from methods import getTitle
 from discord.ext import commands
 from youtube_search import YoutubeSearch
@@ -53,7 +52,7 @@ class Music(commands.Cog):
             'name': emoji.demojize(title).encode('ascii', 'ignore').decode('ascii'),
             'url': url
         }
-        # self.add = csv_record
+        self.add = record
         db[str(ctx.guild.id)].insert_one(record)
         await ctx.send(f'Added {url}')
 
@@ -64,6 +63,7 @@ class Music(commands.Cog):
             return await ctx.reply('Not in voice channel')
         self.queue = [song for song in db[str(ctx.guild.id)].find()]
         self.add = None
+        self.place = 0
         while True:
             for song in range(len(self.queue)):
                 video = self.queue[song]
