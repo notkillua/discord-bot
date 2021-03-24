@@ -70,15 +70,17 @@ class Music(commands.Cog):
         self.add = None
         self.place = 0
         while True:
-            for song in range(len(self.queue)):
-                video = self.queue[song]
+            i = 0
+            while i < len(self.queue):
+                i += 1
+                video = self.queue[i]
                 self.place += 1
                 with YoutubeDL(self.ydl_options) as ydl:
                     info = ydl.extract_info(video['url'], download=False)
                 yt_url = info['formats'][0]['url']
                 if self.go == self.place or not self.go:
                     await ctx.send('Now playing: {}'.format(emoji.emojize(video['name'])))
-                self.song = [video['name'], song]
+                self.song = [video['name'], i]
                 voice.play(discord.FFmpegPCMAudio(
                     yt_url, **self.FFMPEG_OPTIONS))
                 while True:
