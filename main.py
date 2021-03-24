@@ -1,3 +1,5 @@
+import asyncio
+from time import sleep
 from typing import List
 from discord.ext import commands
 from env import env
@@ -69,6 +71,14 @@ async def on_guild_remove(guild: discord.Guild):
     })
 
 # Prefix command to change prefix
+
+
+@myBot.event
+async def on_ready():
+    while True:
+        server_count = len(myBot.guilds)
+        await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} server(s)'))
+        await asyncio.sleep(300)
 
 
 @myBot.command(brief='Change prefix', description='Change prefix. Default prefix is !')
