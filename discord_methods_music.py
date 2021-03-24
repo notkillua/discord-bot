@@ -64,6 +64,8 @@ class Music(commands.Cog):
         voice = utils.get(self.bot.voice_clients, guild=ctx.guild)
         if not voice:
             return await ctx.reply('Not in voice channel')
+        if self.place:
+            return await ctx.reply('Already playing song')
         self.queue = [song for song in db[str(ctx.guild.id)].find()]
         self.add = None
         self.place = 0
