@@ -21,14 +21,8 @@ Some important commands are !queue (to show queue), !add <search term or youtube
 !remove <index of song> (remove song from queue), and !mv <begin> <end> (move songs around in queue).
 For all the commands, run the command !help
 '''
-contributions = '''
-Any contributions are highly appreciated as this was made by one person.
-Any reported bugs or issues are also highly appreciated as this is a relatively new bot.
-Github link: https://github.com/cubix11/discord-bot-musical
-'''
 embed = discord.Embed(title='Musical Discord Bot', description=description)
 embed.add_field(name='Import Commands', value=important_commands, inline=False)
-embed.add_field(name='Contributions', value=contributions, inline=False)
 # Print out which type of bot is being run
 if sys.argv[1] == 'dev':
     print('Development discord bot started')
@@ -52,8 +46,6 @@ startup_extensions: List[str] = [
 # Load extensions
 for extension in startup_extensions:
     myBot.load_extension(extension)
-
-# Add prefix to collection on join
 
 
 @myBot.event
