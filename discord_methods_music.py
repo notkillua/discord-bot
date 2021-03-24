@@ -72,8 +72,8 @@ class Music(commands.Cog):
         while True:
             i = 0
             while i < len(self.queue):
-                i += 1
                 video = self.queue[i]
+                i += 1
                 self.place += 1
                 with YoutubeDL(self.ydl_options) as ydl:
                     info = ydl.extract_info(video['url'], download=False)
