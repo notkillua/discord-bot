@@ -56,6 +56,11 @@ async def on_guild_join(guild: discord.Guild):
         'id': str(guild.id),
         'prefix': '!'
     })
+    server_count = len(myBot.guilds)
+    if server_count == 1:
+        await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} server'))
+    else:
+        await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} servers'))
     for channel in guild.text_channels:
         if channel.permissions_for(guild.me):
             await channel.send(embed=embed)
@@ -69,6 +74,11 @@ async def on_guild_remove(guild: discord.Guild):
     prefixes.delete_one({
         'id': str(guild.id)
     })
+    server_count = len(myBot.guilds)
+    if server_count == 1:
+        await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} server'))
+    else:
+        await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} servers'))
 
 # Prefix command to change prefix
 
@@ -77,7 +87,10 @@ async def on_guild_remove(guild: discord.Guild):
 async def on_ready():
     while True:
         server_count = len(myBot.guilds)
-        await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} server(s)'))
+        if server_count == 1:
+            await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} server'))
+        else:
+            await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} servers'))
         await asyncio.sleep(300)
 
 

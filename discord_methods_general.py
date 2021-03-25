@@ -18,14 +18,23 @@ class General(commands.Cog):
         nick = ' '.join(nick)
         await ctx.me.edit(nick=nick)
 
-    @commands.command(brief='Mute someone', description='Mute will mute a member. Just pass in the member with an @ sign and 1 or 0 for muted or not')
-    @has_permissions(ban_members=True)
-    async def mute(self, ctx, member: Member, value: bool):
+    @commands.command(brief='Mute someone', description='Mute will mute a member. Just pass in the member with an @ sign')
+    @has_permissions(mute_members=True)
+    async def mute(self, ctx, member: Member):
         try:
-            await member.edit(mute=value)
+            await member.edit(mute=True)
         except discord.errors.HTTPException:
             return await ctx.reply('User must be connected to a voice channel')
-        await ctx.send('{member} has been {status}'.format(member=member.display_name, status='muted' if value else 'unmuted'))
+        await ctx.send(f'{member.display_name} has been muted')
+
+    @commands.command(brief='Unmute someone', description='Unmute will unmute a member. Just pass in the member with an @ sign')
+    @has_permissions(mute_members=True)
+    async def mute(self, ctx, member: Member):
+        try:
+            await member.edit(mute=False)
+        except discord.errors.HTTPException:
+            return await ctx.reply('User must be connected to a voice channel')
+        await ctx.send(f'{member.display_name} has been unmuted')
 
     @mute.error
     async def permissions_error(self, ctx, error):
