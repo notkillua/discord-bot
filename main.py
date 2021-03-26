@@ -35,7 +35,10 @@ else:
 
 
 def get_prefix(bot: commands.Bot, message: discord.Message):
-    return prefixes.find_one({'id': str(message.guild.id)})['prefix']
+    try:
+        return prefixes.find_one({'id': str(message.guild.id)})['prefix']
+    except:
+        pass
 
 
 myBot = commands.Bot(command_prefix=get_prefix)
