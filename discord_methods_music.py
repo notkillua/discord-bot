@@ -63,7 +63,7 @@ class Music(commands.Cog):
     async def play(self, ctx):
         voice = utils.get(self.bot.voice_clients, guild=ctx.guild)
         if not voice:
-            return await ctx.reply('Not in voice channel')
+            return await ctx.reply('Not in voice channel. Join the bot with "!join <channel>". If the bot is already in a voice channel, then join it again')
         if self.place:
             return await ctx.reply('Already playing song')
         self.queue = [song for song in db[str(ctx.guild.id)].find()]
@@ -213,8 +213,8 @@ class Music(commands.Cog):
             collection.insert_many(rows)
         await ctx.send('Deleted')
 
-    @commands.command(brief='Toggles state of video', description='Pauses or plays video depending on the state of it')
-    async def toggle(self, ctx):
+    @commands.command(brief='Pause song', description='Pauses or plays video depending on the state of it')
+    async def pause(self, ctx):
         voice = discord.utils.get(self.bot.voice_clients, guild=ctx.guild)
         if not voice:
             return await ctx.reply('Not in voice channel')
@@ -272,9 +272,10 @@ class Music(commands.Cog):
             artist, title = author_song.split(" | ")
         song_lyrics = api.search_song(f'{artist} {title}')
         if song_lyrics:
+            full_lyrics = ''
             for line in song_lyrics.lyrics.split('\n'):
-                if line:
-                    await ctx.send(line)
+                full_lyrics += line + '\n'
+            await ctx.send(full_lyrics)
         else:
             await ctx.reply('Lyrics could not be found.')
 

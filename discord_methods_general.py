@@ -13,10 +13,10 @@ class General(commands.Cog):
         await ctx.reply(f'Hello there, {str(ctx.author)}')
 
     @commands.command(brief='Changes nickname of Bot', description='Syntax: !nick <new name>')
-    @has_permissions(kick_members=True, ban_members=True)
     async def nick(self, ctx, *nick) -> None:
         nick = ' '.join(nick)
         await ctx.me.edit(nick=nick)
+        await ctx.reply(f'Nickname changed to {nick}')
 
 
 def setup(bot):
