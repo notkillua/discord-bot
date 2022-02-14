@@ -1,31 +1,33 @@
 import asyncio
-from time import sleep
 from typing import List
 from discord.ext import commands
 from env import env
 import discord
 import sys
 from db import client
-db = client['discordbot_data']
+db = client[env['DATABASE_PREFIX']]
 # Discord bot token
 TOKEN = env['DEV_TOKEN'] if sys.argv[1] == 'dev' else env['PROD_TOKEN']
 # Get prefixes collection
 prefixes = db['prefixes']
 # Print out which type of bot is being run
-if sys.argv[1] == 'dev':
+if sys.argv[1].lower() == 'dev':
     print('Development discord bot started')
 else:
     print('Production discord bot running')
 
 # Get the prefix for each message
 
-
 def get_prefix(bot: commands.Bot, message: discord.Message):
-    try:
-        return prefixes.find_one({'id': str(message.guild.id)})['prefix']
-    except:
-        pass
-
+    prefix = prefixes.find_one({'id': str(message.guild.id)})
+    if prefix:
+        return prefix['prefix']
+    else:
+        prefixes.insert_one({
+            'id': str(message.guild.id),
+            'prefix': '!'
+        })
+        return '!'
 
 myBot = commands.Bot(command_prefix=get_prefix)
 # Extensions for discord bot
@@ -65,8 +67,6 @@ async def on_guild_remove(guild: discord.Guild):
     else:
         await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} servers'))
 
-# Prefix command to change prefix
-
 
 @myBot.event
 async def on_ready():
@@ -77,21 +77,5 @@ async def on_ready():
         else:
             await myBot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=f'{server_count} servers'))
         await asyncio.sleep(300)
-
-
-@myBot.command(brief='Change prefix', description='Change prefix. Default prefix is !')
-async def prefix(ctx, *new_prefix):
-    new_prefix = ' '.join(new_prefix)
-    if not new_prefix:
-        return
-    prefixes.update_one({
-        'id': str(ctx.guild.id)
-    },
-        {
-        '$set': {
-            'prefix': new_prefix
-        }
-    })
-    await ctx.send(f'Prefix has been changed to {new_prefix}')
 # Run discord bot with token
 myBot.run(TOKEN)

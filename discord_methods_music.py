@@ -2,7 +2,6 @@ from methods import getTitle
 from discord.ext import commands
 from youtube_search import YoutubeSearch
 from youtube_dl import YoutubeDL
-import csv
 import emoji
 from discord import utils
 import discord
@@ -11,7 +10,7 @@ from youtube_title_parse import get_artist_title
 from lyricsgenius import Genius
 from env import env
 from db import client
-db = client['discordbot_queues']
+db = client['{}_queues'.format(env['DATABASE_PREFIX'])]
 
 api = Genius(env['GENIUS_ACCESS_TOKEN'])
 
@@ -141,8 +140,8 @@ class Music(commands.Cog):
         for row in rows:
             await ctx.send(row['url'])
 
-    @commands.command(brief='Move video in queue', description='!mv (beginning place of video) (end place of video)')
-    async def mv(self, ctx, beginning: str, end: str):
+    @commands.command(brief='Move video in queue', description='!move (beginning place of video) (end place of video)')
+    async def move(self, ctx, beginning: str, end: str):
         collection = db[str(ctx.guild.id)]
         rows = [row for row in collection.find()]
         collection.delete_many({})
@@ -226,7 +225,7 @@ class Music(commands.Cog):
             await ctx.send('Now playing')
 
     @commands.command(brief='Removes all songs in queue', description='Removes all songs in queue')
-    async def removeall(self, ctx) -> None:
+    async def clear(self, ctx) -> None:
         db[str(ctx.guild.id)].delete_many({})
         await ctx.send('Removed all')
 
