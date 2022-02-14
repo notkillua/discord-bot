@@ -1,8 +1,8 @@
 from discord.ext import commands
-import discord
-from discord.ext.commands.core import has_permissions, MissingPermissions
-from discord import Member
-
+from db import client
+from env import env
+db = client[env['DATABASE_PREFIX']]
+prefixes = db['prefixes']
 
 class General(commands.Cog):
     def __init__(self, bot):
@@ -17,6 +17,21 @@ class General(commands.Cog):
         nick = ' '.join(nick)
         await ctx.me.edit(nick=nick)
         await ctx.reply(f'Nickname changed to {nick}')
+
+    @commands.command(brief='Change prefix', description='Change prefix. Default prefix is !')
+    async def prefix(ctx, *new_prefix):
+        new_prefix = ' '.join(new_prefix)
+        if not new_prefix:
+            return
+        prefixes.update_one({
+            'id': str(ctx.guild.id)
+        },
+            {
+            '$set': {
+                'prefix': new_prefix
+            }
+        })
+        await ctx.send(f'Prefix has been changed to {new_prefix}')
 
 
 def setup(bot):
