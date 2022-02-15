@@ -19,7 +19,8 @@ class General(commands.Cog):
         await ctx.reply(f'Nickname changed to {nick}')
 
     @commands.command(brief='Change prefix', description='Change prefix. Default prefix is !')
-    async def prefix(ctx, *new_prefix):
+    async def prefix(self, ctx, *new_prefix):
+        print(new_prefix)
         new_prefix = ' '.join(new_prefix)
         if not new_prefix:
             return
