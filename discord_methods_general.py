@@ -20,7 +20,6 @@ class General(commands.Cog):
 
     @commands.command(brief='Change prefix', description='Change prefix. Default prefix is !')
     async def prefix(self, ctx, *new_prefix):
-        print(new_prefix)
         new_prefix = ' '.join(new_prefix)
         if not new_prefix:
             return
